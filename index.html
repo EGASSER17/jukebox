@@ -255,8 +255,8 @@ async function toggleShuffle() {
   showToast(shuffleOn ? 'Aléatoire activé' : 'Aléatoire désactivé');
 }
 
-window.onSpotifyWebPlaybackSDKReady = () => {
-  if (!token) return;
+function initPlayer() {
+  if (!token || !window.Spotify) { setTimeout(initPlayer, 500); return; }
   player = new Spotify.Player({ name: 'Mon Jukebox', getOAuthToken: cb => cb(token), volume: 0.8 });
   player.addListener('ready', ({ device_id }) => {
     deviceId = device_id;
