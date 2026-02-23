@@ -81,10 +81,8 @@
       <div class="queue-list" id="queueList"></div>
     </div>
     <div class="section">
-      <div class="section-label">Playlist</div>
-      <select class="playlist-select" id="playlistSelect" onchange="loadPlaylist(this.value)">
-        <option value="">Chargement de tes playlists...</option>
-      </select>
+      <div class="section-label">❤️ Morceaux likés</div>
+      <button class="load-btn" style="width:100%;padding:10px;" onclick="loadLikedTracks()">Recharger mes morceaux likés</button>
     </div>
     <div class="albums-section">
       <div class="section-label">Albums</div>
@@ -167,10 +165,9 @@ async function loadPlaylists() {
   });
 }
 
-async function loadPlaylist(id) {
-  if (!id) return;
-  showToast('Chargement...');
-  let tracks = [], next = `/playlists/${id}/tracks?limit=100`;
+async function loadLikedTracks() {
+  showToast('Chargement des morceaux likés...');
+  let tracks = [], next = '/me/tracks?limit=50';
   while (next) {
     const data = await api(next.replace('https://api.spotify.com/v1',''));
     if (!data || !data.items) break;
@@ -289,7 +286,7 @@ function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainApp').style.display = 'flex';
   startPlayer();
-  loadPlaylists();
+  loadLikedTracks();
 }
 
 init();
