@@ -7,15 +7,8 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #1a0a00; color: #f0e0c0; font-family: 'Georgia', serif; min-height: 100vh; }
-  .machine {
-    max-width: 480px; margin: 0 auto;
-    background: linear-gradient(180deg, #8B1A00 0%, #5C1100 40%, #3a0a00 100%);
-    min-height: 100vh;
-    border-left: 6px solid #c8860a; border-right: 6px solid #c8860a;
-    box-shadow: 0 0 40px #c8860a55;
-    display: flex; flex-direction: column;
-  }
-  .header { background: linear-gradient(90deg, #c8860a, #f5c842, #c8860a); padding: 18px; text-align: center; border-bottom: 4px solid #8B1A00; }
+  .machine { max-width: 480px; margin: 0 auto; background: linear-gradient(180deg,#8B1A00 0%,#5C1100 40%,#3a0a00 100%); min-height: 100vh; border-left: 6px solid #c8860a; border-right: 6px solid #c8860a; box-shadow: 0 0 40px #c8860a55; display: flex; flex-direction: column; }
+  .header { background: linear-gradient(90deg,#c8860a,#f5c842,#c8860a); padding: 18px; text-align: center; border-bottom: 4px solid #8B1A00; }
   .header h1 { font-size: 2rem; color: #1a0a00; text-shadow: 1px 1px 0 #f5c842; letter-spacing: 4px; text-transform: uppercase; }
   .screen { background: #0a1a0a; margin: 16px; border-radius: 8px; border: 3px solid #c8860a; padding: 14px; min-height: 100px; box-shadow: inset 0 0 20px #00000088; }
   .now-playing-label { font-size: .65rem; color: #c8860a; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
@@ -26,11 +19,12 @@
   .controls { display: flex; justify-content: center; gap: 16px; margin: 8px 16px; }
   .ctrl-btn { background: #c8860a; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer; color: #1a0a00; transition: background .15s; box-shadow: 0 3px 8px #00000066; }
   .ctrl-btn:hover { background: #f5c842; }
+  .section { margin: 0 16px 12px; }
+  .section-label { font-size: .65rem; color: #c8860a; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .playlist-select { width: 100%; background: #0a1a0a; border: 2px solid #c8860a; border-radius: 6px; color: #f0e0c0; padding: 8px 10px; font-size: .85rem; outline: none; cursor: pointer; }
   .albums-section { flex: 1; margin: 0 16px; overflow: hidden; display: flex; flex-direction: column; }
-  .albums-label { font-size: .65rem; color: #c8860a; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
   .albums-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; overflow-y: auto; flex: 1; padding-bottom: 10px; }
   .albums-grid::-webkit-scrollbar { width: 4px; }
-  .albums-grid::-webkit-scrollbar-track { background: #3a0a00; }
   .albums-grid::-webkit-scrollbar-thumb { background: #c8860a; border-radius: 2px; }
   .album-card { cursor: pointer; border-radius: 6px; overflow: hidden; border: 2px solid transparent; transition: border .15s, transform .15s; }
   .album-card:hover { border-color: #f5c842; transform: scale(1.04); }
@@ -42,7 +36,7 @@
   .tracks-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #3a0a00; position: sticky; top: 0; }
   .tracks-header h3 { font-size: .9rem; color: #f5c842; }
   .close-btn { background: none; border: none; color: #c8860a; font-size: 1.4rem; cursor: pointer; }
-  .track-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #3a0a0044; cursor: pointer; transition: background .1s; }
+  .track-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #3a0a0044; transition: background .1s; }
   .track-item:hover { background: #3a0a00; }
   .track-num { font-size: .75rem; color: #c8860a; min-width: 22px; text-align: right; }
   .track-info { flex: 1; overflow: hidden; }
@@ -52,21 +46,14 @@
   .queue-btn:hover { background: #f5c842; }
   .login-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px; }
   .login-screen p { text-align: center; color: #c8860a; font-size: .9rem; }
-  .login-btn { background: linear-gradient(90deg,#1DB954,#1aa34a); color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 1rem; font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 4px 15px #1DB95455; }
+  .login-btn { background: linear-gradient(90deg,#1DB954,#1aa34a); color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 1rem; font-weight: bold; cursor: pointer; letter-spacing: 1px; }
   .login-btn:hover { background: linear-gradient(90deg,#1aa34a,#1DB954); }
   .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1DB954; color: white; padding: 10px 20px; border-radius: 20px; font-size: .85rem; opacity: 0; transition: opacity .3s; z-index: 200; white-space: nowrap; }
   .toast.show { opacity: 1; }
-  .playlist-input-section { margin: 0 16px 12px; display: flex; gap: 8px; }
-  .playlist-input { flex: 1; background: #0a1a0a; border: 2px solid #c8860a; border-radius: 6px; color: #f0e0c0; padding: 8px 10px; font-size: .8rem; outline: none; }
-  .playlist-input::placeholder { color: #666; }
-  .load-btn { background: #c8860a; border: none; border-radius: 6px; color: #1a0a00; padding: 8px 12px; font-size: .8rem; font-weight: bold; cursor: pointer; }
-  .load-btn:hover { background: #f5c842; }
-  .queue-section { margin: 0 16px 12px; }
-  .queue-label { font-size: .65rem; color: #c8860a; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
   .queue-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
   .queue-list::-webkit-scrollbar { height: 3px; }
   .queue-list::-webkit-scrollbar-thumb { background: #c8860a; border-radius: 2px; }
-  .queue-item { flex-shrink: 0; background: #3a0a00; border-radius: 4px; padding: 4px 8px; font-size: .7rem; color: #f0e0c0; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .queue-item { flex-shrink: 0; background: #3a0a00; border-radius: 4px; padding: 4px 8px; font-size: .7rem; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 </style>
 </head>
 <body>
@@ -89,18 +76,20 @@
       <button class="ctrl-btn" onclick="nextTrack()">⏭</button>
       <button class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()">🔀</button>
     </div>
-    <div class="queue-section" id="queueSection" style="display:none;">
-      <div class="queue-label">File d'attente</div>
+    <div class="section" id="queueSection" style="display:none;">
+      <div class="section-label">File d'attente</div>
       <div class="queue-list" id="queueList"></div>
     </div>
-    <div class="playlist-input-section">
-      <input class="playlist-input" id="playlistUrl" placeholder="Lien playlist Spotify..." />
-      <button class="load-btn" onclick="loadPlaylist()">Charger</button>
+    <div class="section">
+      <div class="section-label">Playlist</div>
+      <select class="playlist-select" id="playlistSelect" onchange="loadPlaylist(this.value)">
+        <option value="">Chargement de tes playlists...</option>
+      </select>
     </div>
     <div class="albums-section">
-      <div class="albums-label">Albums</div>
+      <div class="section-label">Albums</div>
       <div class="albums-grid" id="albumsGrid">
-        <div style="grid-column:1/-1;text-align:center;color:#666;font-size:.8rem;padding:20px;">Charge une playlist Spotify pour voir les albums</div>
+        <div style="grid-column:1/-1;text-align:center;color:#666;font-size:.8rem;padding:20px;">Sélectionne une playlist pour voir les albums</div>
       </div>
     </div>
   </div>
@@ -113,7 +102,6 @@
   </div>
   <div id="tracksList"></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script src="https://sdk.scdn.co/spotify-player.js"></script>
@@ -122,14 +110,9 @@ const CLIENT_ID = '3fcf4320b95b432f9271cbfd97c40b22';
 const REDIRECT_URI = 'https://egasser17.github.io/jukebox/';
 const SCOPES = 'streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state playlist-read-private playlist-read-collaborative';
 
-let token = null, player = null, deviceId = null;
-let albums = [], queue = [], shuffleOn = false;
+let token = null, player = null, deviceId = null, albums = [], queue = [], shuffleOn = false;
 
-// PKCE helpers
-function b64(buf) {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-}
+function b64(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,''); }
 async function pkce() {
   const verifier = b64(crypto.getRandomValues(new Uint8Array(32)));
   const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier));
@@ -156,8 +139,7 @@ async function getToken(code) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ grant_type: 'authorization_code', code, redirect_uri: REDIRECT_URI, client_id: CLIENT_ID, code_verifier: verifier })
   });
-  const data = await res.json();
-  return data.access_token;
+  return (await res.json()).access_token;
 }
 
 function showToast(msg) {
@@ -174,14 +156,24 @@ async function api(endpoint, method='GET', body=null) {
   return res.json();
 }
 
-async function loadPlaylist() {
-  const url = document.getElementById('playlistUrl').value.trim();
-  const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
-  if (!match) { showToast('Lien invalide !'); return; }
+async function loadPlaylists() {
+  const data = await api('/me/playlists?limit=50');
+  const sel = document.getElementById('playlistSelect');
+  sel.innerHTML = '<option value="">— Choisis une playlist —</option>';
+  data.items.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id; opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+}
+
+async function loadPlaylist(id) {
+  if (!id) return;
   showToast('Chargement...');
-  let tracks = [], next = `/playlists/${match[1]}/tracks?limit=100`;
+  let tracks = [], next = `/playlists/${id}/tracks?limit=100`;
   while (next) {
     const data = await api(next.replace('https://api.spotify.com/v1',''));
+    if (!data || !data.items) break;
     tracks = tracks.concat(data.items.filter(i => i.track?.album));
     next = data.next ? data.next.replace('https://api.spotify.com/v1','') : null;
   }
@@ -255,8 +247,9 @@ async function toggleShuffle() {
   showToast(shuffleOn ? 'Aléatoire activé' : 'Aléatoire désactivé');
 }
 
-function initPlayer() {
-  if (!token || !window.Spotify) { setTimeout(initPlayer, 500); return; }
+function startPlayer() {
+  if (!window.Spotify || !token) { setTimeout(startPlayer, 300); return; }
+  if (player) return;
   player = new Spotify.Player({ name: 'Mon Jukebox', getOAuthToken: cb => cb(token), volume: 0.8 });
   player.addListener('ready', ({ device_id }) => {
     deviceId = device_id;
@@ -273,7 +266,9 @@ function initPlayer() {
     if (queue.length) { queue.shift(); renderQueue(); }
   });
   player.connect();
-};
+}
+
+window.onSpotifyWebPlaybackSDKReady = () => startPlayer();
 
 async function init() {
   const params = new URLSearchParams(window.location.search);
@@ -283,7 +278,6 @@ async function init() {
     window.history.replaceState({}, '', window.location.pathname);
     token = await getToken(code);
     sessionStorage.setItem('spotify_token', token);
-    console.log('Token obtenu:', token ? 'OK' : 'ECHEC');
     showApp();
   } else if (saved) {
     token = saved;
@@ -294,6 +288,8 @@ async function init() {
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainApp').style.display = 'flex';
+  startPlayer();
+  loadPlaylists();
 }
 
 init();
